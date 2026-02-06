@@ -1,0 +1,12 @@
+
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 1000
+
+FPS = 120
+
+MAX_ASTEROIDS = 20
+START_LIVES = 2
+ASTEROID_SPAWN_INTERVAL = 5.0  # seconds
+SPACESHIP_TURN_SPEED = 180.0  # degrees per second
+
+GRAVITY_STRENGTH = 200.0  # pixels per second squared
