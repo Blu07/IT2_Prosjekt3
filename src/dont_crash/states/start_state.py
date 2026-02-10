@@ -1,6 +1,6 @@
 import pygame
 
-from states import State
+from .state import State
 
 from objects import StartTitle
 from objects import StartButton

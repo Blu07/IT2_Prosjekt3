@@ -5,7 +5,16 @@ from config import GRAVITY_STRENGTH, SPACESHIP_TURN_SPEED, WINDOW_WIDTH, WINDOW_
 from utils import smootherstep
 
 class SpaceShip:
+    """ Represents the player's spaceship with physics simulation including thrust, gravity, and drag.
+    """
+    
     def __init__(self, x, y):
+        """ Initialize a SpaceShip at the given position.
+
+        Args:
+            x (float): The initial x-coordinate of the spaceship.
+            y (float): The initial y-coordinate of the spaceship.
+        """
         
         self.mass = 2000.0  # kg
         
@@ -41,8 +50,12 @@ class SpaceShip:
         self.time_since_thrust_start = 0.0
         self.time_since_turn_start = 0.0
         
-
     def update(self, delta_time):
+        """ Update the spaceship's physics, position, and rotation based on elapsed time.
+
+        Args:
+            delta_time (float): The time elapsed since the last frame in seconds.
+        """
         
         if self.thrusting:
             self.time_since_thrust_start += delta_time
@@ -111,8 +124,12 @@ class SpaceShip:
             self.pos_y = 0.0
             self.vel_y = 0.0
         
-
     def draw(self, surface):
+        """ Draw the spaceship and its thrust flame on the given surface.
+
+        Args:
+            surface (pygame.Surface): The surface to draw the spaceship on.
+        """
         rotated_image = pygame.transform.rotate(self.original_image, self.angle - 90)
         new_rect = rotated_image.get_rect(center=(self.pos_x, (self.pos_y)))
         

@@ -5,15 +5,23 @@ from config import WINDOW_WIDTH, WINDOW_HEIGHT, START_LIVES, MAX_ASTEROIDS, ASTE
 from models import SpaceShip, Asteroid
 from objects import TimeAliveText, LivesText
 from utils import balls_collide
-from states import State
+from .state import State
     
 class GameState(State):
+    """ State representing the active gameplay, managing spaceship, asteroids, and collision detection.
+    """
     
     UP_KEYS = [pygame.K_w, pygame.K_UP]
     LEFT_KEYS = [pygame.K_a, pygame.K_LEFT]
     RIGHT_KEYS = [pygame.K_d, pygame.K_RIGHT]
     
-    def __init__(self, window, clock):
+    def __init__(self, window: pygame.Surface, clock: pygame.time.Clock):
+        """ Initialize the GameState with a spaceship, asteroids, and UI elements.
+
+        Args:
+            window (pygame.Surface): The Pygame window surface where the game will render.
+            clock (pygame.time.Clock): The Pygame clock object used for managing the frame rate.
+        """
         super().__init__(window, clock)
         
         self.asteroids = []
@@ -32,6 +40,8 @@ class GameState(State):
         self.time_since_last_asteroid_spawn = 0.0
         
     def create_asteroid(self):
+        """ Create and add a new asteroid to the game if the maximum has not been reached.
+        """
         if len(self.asteroids) >= self.max_asteroids:
             return
         
@@ -45,11 +55,24 @@ class GameState(State):
         self.asteroids.append(asteroid)
         
     def remove_asteroid(self, asteroid):
+        """ Remove an asteroid from the game.
+
+        Args:
+            asteroid (Asteroid): The asteroid object to remove from the game.
+        """
         if asteroid in self.asteroids:
             self.asteroids.remove(asteroid)
     
+    def handle_events(self, events: list[pygame.event.Event]) -> tuple[str | None, dict]:
+        """ Handle keyboard controls, collision detection, and game-over conditions.
 
-    def handle_events(self, events) -> tuple[str | None, dict]:
+        Args:
+            events (list[pygame.event.Event]): A list of Pygame events to process.
+        
+        Returns:
+            tuple[str | None, dict]: A tuple where the first element indicates the next state (e.g. "game_over", "exit"),
+                                and the second element is a dictionary containing game information to pass to the next state.
+        """
         navigation, info = super().handle_events(events) # Handle quit and escape events
         
         # Set flags for spaceship controls
@@ -85,8 +108,13 @@ class GameState(State):
                     info = {"time_alive": self.time_alive}
         
         return navigation, info
+    
+    def update(self, delta_time: float):
+        """ Update game entities, spawn asteroids, and track time alive.
 
-    def update(self, delta_time):
+        Args:
+            delta_time (float): The time elapsed since the last frame in seconds.
+        """
         for asteroid in self.asteroids:
             asteroid.update(delta_time)
                 
@@ -101,7 +129,9 @@ class GameState(State):
             self.time_since_last_asteroid_spawn = 0.0
                     
     
-    def render(self):
+    def render(self) -> None:
+        """ Draw all game entities including asteroids, spaceship, and UI elements on the screen.
+        """
         self.window.fill((0, 0, 0))
         
         for asteroid in self.asteroids:
